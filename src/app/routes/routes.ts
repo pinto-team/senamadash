@@ -1,0 +1,27 @@
+export const ROUTES = {
+    ROOT: '/',
+
+    LOGIN: '/login',
+
+    DASHBOARD: '/dashboard',
+
+    // Brand
+    BRAND: {
+        LIST: '/brands',
+        NEW: '/brands/new',
+        DETAIL: (id = ':id') => `/brands/${id}`,
+        EDIT: (id = ':id') => `/brands/${id}/edit`,
+    },
+    // Category
+    CATEGORY: {
+        LIST: '/categories',
+        EDIT: (id = ':id') => `/categories/${id}/edit`,
+    },
+    // Product
+    PRODUCT: {
+        LIST: '/products',
+        NEW: '/products/new',
+        DETAIL: (id = ':id') => `/products/${id}`,
+        EDIT: (id = ':id') => `/products/${id}/edit`,
+    },
+} as const

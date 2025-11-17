@@ -1,0 +1,221 @@
+{
+  "errors.validation": "خطای اعتبارسنجی",
+  "errors.fix_highlighted_fields": "لطفاً فیلدهای مشخص‌شده را اصلاح کنید.",
+  "errors.bad_request": "درخواست نامعتبر",
+  "errors.unauthorized": "غیرمجاز",
+  "errors.please_login_again": "لطفاً دوباره وارد شوید.",
+  "errors.forbidden": "دسترسی غیرمجاز",
+  "errors.access_denied": "شما اجازه دسترسی به این بخش را ندارید.",
+  "errors.not_found": "یافت نشد",
+  "errors.item_not_found": "مورد درخواست‌شده یافت نشد.",
+  "errors.conflict": "تداخل",
+  "errors.item_already_exists": "این مورد قبلاً وجود دارد.",
+  "errors.server_error": "خطای سرور",
+  "errors.try_again_later": "لطفاً بعداً دوباره تلاش کنید.",
+  "errors.network_issue": "مشکل شبکه",
+  "errors.network_unavailable": "اینترنت یا سرور در دسترس نیست.",
+  "errors.unknown": "خطای ناشناخته",
+  "errors.try_again": "مشکلی پیش آمد، لطفاً دوباره تلاش کنید.",
+  "errors.timeout_title": "مهلت درخواست به پایان رسید",
+  "errors.timeout_desc": "سرور بیش از حد طول کشید تا پاسخ دهد. لطفاً دوباره امتحان کنید.",
+  "errors.retry": "تلاش دوباره",
+
+  "app.loading_route": "در حال بارگذاری مسیر…",
+  "app.title": "داشبورد",
+
+  "menu.basic": "پایه",
+  "menu.basic.brand": "برندها",
+  "menu.basic.category": "دسته‌ها",
+  "menu.basic.product": "محصولات",
+
+  "user.guest": "مهمان",
+
+  "brands.saved_success": "برند با موفقیت ذخیره شد",
+  "brands.add": "افزودن برند",
+  "brands.deleted": "برند حذف شد",
+  "brands.logo_alt": "لوگوی برند",
+  "brands.no_logo": "لوگو موجود نیست",
+  "brands.title": "برندها",
+  "brands.create": "ایجاد برند",
+  "brands.search_placeholder": "جستجوی برند...",
+
+  "categories.saved_success": "دسته با موفقیت ذخیره شد",
+  "categories.add": "افزودن دسته",
+  "categories.edit": "ویرایش دسته",
+  "categories.deleted": "دسته حذف شد",
+  "categories.title": "دسته‌ها",
+  "categories.create": "افزودن دسته",
+  "categories.search_placeholder": "جستجوی دسته...",
+  "categories.image_alt": "تصویر دسته",
+
+  "products.saved_success": "محصول با موفقیت ذخیره شد",
+  "products.add": "افزودن محصول",
+  "products.details.title": "جزئیات محصول",
+  "products.title": "محصولات",
+  "products.create": "ایجاد محصول",
+  "products.search_placeholder": "جستجوی محصول...",
+  "products.image_alt": "تصویر محصول",
+
+  "common.error": "مشکلی پیش آمد",
+  "common.back": "بازگشت",
+  "common.save": "ذخیره",
+  "common.saving": "در حال ذخیره...",
+  "common.loading": "در حال بارگذاری...",
+  "common.success": "عملیات با موفقیت انجام شد",
+  "common.undo": "برگردان",
+  "common.restored": "مورد بازگردانی شد",
+  "common.no_results": "هیچ نتیجه‌ای یافت نشد",
+  "common.showing_count": "نمایش {count} نتیجه",
+  "common.search_hint": "برای جستجو تایپ کنید",
+
+  "actions.edit": "ویرایش",
+
+  "products.try_again": "دوباره تلاش کنید",
+
+  "pagination.first": "اولین",
+  "pagination.prev": "قبلی",
+  "pagination.next": "بعدی",
+  "pagination.last": "آخرین",
+  "pagination.rowsPerPage": "تعداد در هر صفحه",
+  "pagination.page": "صفحه",
+  "pagination.of": "از",
+
+  "brands.form.title": "اطلاعات برند",
+  "brands.form.name": "نام",
+  "brands.form.name_ph": "نام برند را وارد کنید",
+  "brands.form.country": "کشور",
+  "brands.form.country_ph": "نام کشور را وارد کنید",
+  "brands.form.website": "وب‌سایت",
+  "brands.form.website_ph": "آدرس وب‌سایت را وارد کنید",
+  "brands.form.description": "توضیحات",
+  "brands.form.description_ph": "توضیحات را وارد کنید",
+  "brands.form.logo": "لوگو",
+  "brands.form.logo_help": "لوگوی برند را بارگذاری کنید (ترجیحاً مربع باشد)",
+
+  "categories.form.title": "اطلاعات دسته",
+  "categories.form.name": "نام",
+  "categories.form.name_ph": "نام دسته را وارد کنید",
+  "categories.form.description": "توضیحات",
+  "categories.form.description_ph": "توضیحات را وارد کنید",
+  "categories.form.parent_id": "دسته والد",
+  "categories.form.parent_id_ph": "دسته والد را انتخاب کنید",
+  "categories.form.parent_none": "بدون والد",
+  "categories.form.image": "تصویر",
+  "categories.form.image_help": "تصویر دسته را بارگذاری کنید (ترجیحاً مربع باشد)",
+  "categories.help_drag_drop": "💡 راهنما: آیتم‌ها را بکشید و رها کنید تا جابجا شوند. برای تبدیل به زیردسته، روی دستهٔ مورد نظر رها کنید.",
+
+  "products.form.title": "اطلاعات محصول",
+  "products.form.name": "نام",
+  "products.form.name_ph": "نام محصول را وارد کنید",
+  "products.form.sku": "کد کالا",
+  "products.form.sku_ph": "کد کالا را وارد کنید",
+  "products.form.price": "قیمت",
+  "products.form.price_ph": "قیمت را وارد کنید",
+  "products.form.category_id": "دسته",
+  "products.form.category_id_ph": "دسته را انتخاب کنید",
+  "products.form.brand_id": "برند",
+  "products.form.brand_id_ph": "برند را انتخاب کنید",
+  "products.form.full_name": "نام کامل",
+  "products.form.full_name_ph": "نام کامل محصول را وارد کنید",
+  "products.form.barcode": "بارکد",
+  "products.form.barcode_ph": "بارکد را وارد کنید",
+  "products.form.barcode_type": "نوع بارکد",
+  "products.form.barcode_type_ph": "نوع بارکد را وارد کنید",
+  "products.form.weight": "وزن",
+  "products.form.weight_ph": "وزن را وارد کنید",
+  "products.form.weight_unit": "واحد وزن",
+  "products.form.weight_unit_ph": "واحد وزن را وارد کنید",
+  "products.form.packaging": "بسته‌بندی",
+  "products.form.packaging_ph": "نوع بسته‌بندی را وارد کنید",
+  "products.form.storage": "شرایط نگهداری",
+  "products.form.storage_ph": "شرایط نگهداری را وارد کنید",
+  "products.form.shelf_life_days": "ماندگاری (روز)",
+  "products.form.shelf_life_days_ph": "تعداد روزهای ماندگاری را وارد کنید",
+  "products.form.is_active": "وضعیت",
+  "products.form.description": "توضیحات",
+  "products.form.description_ph": "توضیحات را وارد کنید",
+  "products.form.image": "تصویر",
+  "products.form.image_help": "تصویر محصول را بارگذاری کنید (ترجیحاً مربع باشد)",
+  "products.form.images": "تصاویر اضافی",
+  "products.form.add_image": "افزودن تصویر",
+  "products.form.attributes": "ویژگی‌ها",
+  "products.form.add_attribute": "افزودن ویژگی",
+  "products.form.key": "کلید",
+  "products.form.value": "مقدار",
+
+  "products.table.name": "نام",
+  "products.table.sku": "کد کالا",
+  "products.table.price": "قیمت",
+  "products.table.actions": "عملیات",
+  "products.actions.edit": "ویرایش",
+  "products.actions.delete": "حذف",
+  "products.deleted": "محصول حذف شد",
+
+  "validation.required": "این فیلد الزامی است",
+  "validation.min_length": "حداقل باید {n} کاراکتر باشد",
+  "validation.max_length": "حداکثر باید {n} کاراکتر باشد",
+  "validation.url": "لطفاً یک آدرس معتبر وارد کنید",
+
+  "brands.table.logo": "لوگو",
+  "brands.table.name": "نام",
+  "brands.table.country": "کشور",
+  "brands.table.website": "وب‌سایت",
+  "brands.table.actions": "عملیات",
+
+  "categories.table.name": "نام",
+  "categories.table.parent": "والد",
+  "categories.table.actions": "عملیات",
+
+  "categories.actions.edit": "ویرایش",
+  "categories.actions.delete": "حذف",
+  "categories.actions.delete_confirm": "آیا از حذف این دسته مطمئن هستید؟ این عمل قابل بازگشت نیست.",
+
+  "uploader.errors.type_image_only": "فقط فایل‌های تصویری مجاز هستند",
+  "uploader.errors.max_size": "حداکثر حجم فایل {size} مگابایت است",
+  "uploader.errors.generic": "آپلود ناموفق بود",
+  "uploader.success": "آپلود با موفقیت انجام شد",
+  "uploader.aria.drop_or_click": "تصویر را اینجا بکشید یا برای آپلود کلیک کنید",
+  "uploader.actions.remove": "حذف",
+  "uploader.status.uploading": "در حال آپلود...",
+  "uploader.hint.drag_or_click": "یک تصویر اینجا بکشید یا برای آپلود کلیک کنید",
+
+  "login.title": "ورود",
+  "login.subtitle": "برای ورود به حساب کاربری اطلاعات خود را وارد کنید",
+  "login.usernamePlaceholder": "نام کاربری خود را وارد کنید",
+  "login.passwordPlaceholder": "رمز عبور خود را وارد کنید",
+  "login.forgotPassword": "رمز عبور را فراموش کرده‌اید؟",
+  "login.agreePrefix": "با ورود، شما موافقت خود را با",
+  "login.terms": "شرایط استفاده",
+  "login.and": "و",
+  "login.privacy": "سیاست حفظ حریم خصوصی",
+  "username": "نام کاربری",
+  "password": "رمز عبور",
+  "signIn": "ورود",
+  "loading": "در حال بارگذاری...",
+  "validation.usernameMin": "نام کاربری باید حداقل ۳ کاراکتر باشد",
+  "validation.passwordMin": "رمز عبور باید حداقل ۳ کاراکتر باشد",
+
+  "language.change": "تغییر زبان",
+
+  "sidebar.account": "حساب کاربری",
+  "sidebar.billing": "صورتحساب",
+  "sidebar.notifications": "اعلان‌ها",
+  "sidebar.signOut": "خروج",
+
+  "notFound.message": "صفحه یافت نشد.",
+  "notFound.goHome": "بازگشت به خانه",
+
+  "auth.unknownLoginError": "خطای ناشناخته در ورود",
+
+  "brands.details.title": "جزئیات برند",
+  "brands.actions.edit": "ویرایش",
+  "brands.actions.delete": "حذف",
+  "common.more_actions": "گزینه‌های بیشتر",
+
+  "actions.delete": "حذف",
+  "brands.actions.delete_confirm": "آیا از حذف این برند مطمئن هستید؟ این عملیات قابل بازگشت نیست.",
+  "common.cancel": "انصراف",
+  "common.confirm": "تأیید",
+  "common.active": "فعال",
+  "common.inactive": "غیرفعال"
+}
