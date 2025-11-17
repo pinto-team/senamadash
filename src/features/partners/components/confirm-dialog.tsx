@@ -10,7 +10,7 @@ import {
     AlertDialogTitle,
     AlertDialogPortal,
     AlertDialogOverlay,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog.tsx"
 
 type ConfirmDialogProps = {
     open: boolean

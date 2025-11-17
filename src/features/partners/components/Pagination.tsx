@@ -1,10 +1,10 @@
 import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { Button } from "@/components/ui/button.tsx"
+import { Label } from "@/components/ui/label.tsx"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select.tsx"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
-import { useI18n } from "@/shared/hooks/useI18n"
-import { convertDigitsByLocale } from "@/shared/i18n/numbers"
+import { useI18n } from "@/shared/hooks/useI18n.ts"
+import { convertDigitsByLocale } from "@/shared/i18n/numbers.ts"
 
 export type PaginationProps = {
     page: number

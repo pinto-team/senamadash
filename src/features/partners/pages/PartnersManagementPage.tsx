@@ -13,8 +13,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import Pagination from '@/features/brands/components/ui/Pagination'
-import ConfirmDialog from '@/features/brands/components/ui/confirm-dialog'
+import Pagination from '@/features/partners/components/Pagination.tsx'
+import ConfirmDialog from '@/features/partners/components/confirm-dialog.tsx'
 import PartnersTable from '@/features/partners/components/PartnersTable'
 import PartnerForm from '@/features/partners/components/PartnerForm'
 import { PartnerDetailsDrawer } from '@/features/partners/components/PartnerDetailsDrawer'

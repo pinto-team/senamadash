@@ -75,7 +75,12 @@ function toFormState(partner?: PartnerData | null): PartnerFormState {
     return {
         brand_name: partner?.brand_name ?? '',
         manager_full_name: partner?.manager_full_name ?? '',
-        contact_numbers: partner?.contact_numbers?.length ? partner.contact_numbers : [emptyContact],
+        contact_numbers: partner?.contact_numbers?.length
+            ? partner.contact_numbers.map((c) => ({
+                label: c.label ?? '',
+                number: c.number,
+            }))
+            : [emptyContact],
         social_links: partner?.social_links?.length ? partner.social_links : [emptySocial],
         business_type: partner?.business_type ?? 'other',
         category: partner?.category ?? '',
@@ -391,10 +396,10 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                             <Label>{t('partners.form.transaction_count')}</Label>
                             <Input type="number" inputMode="numeric" {...register('transaction_count')} />
                         </div>
-                        <div className="space-y-1">
-                            <Label>{t('partners.form.avg_transaction_value')}</Label>
-                            <Input type="number" inputMode="numeric" {...register('avg_transaction_value')} />
-                        </div>
+                        {/*<div className="space-y-1">*/}
+                        {/*    <Label>{t('partners.form.avg_transaction_value')}</Label>*/}
+                        {/*    <Input type="number" inputMode="numeric" {...register('avg_transaction_value')} />*/}
+                        {/*</div>*/}
                     </div>
                 </section>
 
