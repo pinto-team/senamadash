@@ -2,7 +2,9 @@ import type { AxiosRequestConfig } from 'axios'
 import { catalogClient } from '@/lib/axios'
 import { API_ROUTES } from '@/shared/constants/apiRoutes'
 import { API_CONFIG } from '@/shared/config/api.config'
-import type { UploadFilesResponse } from '@/features/brands/model/types'
+type UploadFilesResponse = {
+    files?: { id: string; url: string }[]
+}
 
 export function toAbsoluteUrl(pathOrUrl: string): string {
     if (!pathOrUrl) return ''
