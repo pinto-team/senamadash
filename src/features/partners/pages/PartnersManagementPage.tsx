@@ -40,6 +40,55 @@ const initialFilters: FilterState = {
     customer_level: '',
 }
 
+type PartnerFormFullScreenSheetProps = {
+    open: boolean
+    title: string
+    description: string
+    submitting: boolean
+    onSubmit: (payload: PartnerPayload) => void
+    onClose: () => void
+    initialValues?: PartnerData | null
+}
+
+function PartnerFormFullScreenSheet({
+    open,
+    title,
+    description,
+    submitting,
+    onSubmit,
+    onClose,
+    initialValues,
+}: PartnerFormFullScreenSheetProps) {
+    return (
+        <Sheet open={open} onOpenChange={(nextOpen) => {
+            if (!nextOpen) onClose()
+        }}>
+            <SheetContent size="full" className="overflow-hidden p-0">
+                <div className="flex h-full flex-col bg-background">
+                    <div className="border-b px-6 py-4">
+                        <SheetHeader className="gap-1 p-0">
+                            <SheetTitle className="text-2xl font-bold">{title}</SheetTitle>
+                            <SheetDescription className="text-base text-muted-foreground">
+                                {description}
+                            </SheetDescription>
+                        </SheetHeader>
+                    </div>
+                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                        <div className="mx-auto w-full max-w-5xl">
+                            <PartnerForm
+                                initialValues={initialValues ?? undefined}
+                                submitting={submitting}
+                                onSubmit={onSubmit}
+                                onCancel={onClose}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </SheetContent>
+        </Sheet>
+    )
+}
+
 export default function PartnersManagementPage() {
     const { t } = useI18n()
     const [search, setSearch] = useState('')
@@ -281,6 +330,8 @@ export default function PartnersManagementPage() {
             />
         )
 
+    const subtitle = t('partners.subtitle') as string
+
     return (
         <DashboardLayout>
             <div className="flex flex-1 flex-col gap-6 py-6">
@@ -306,38 +357,24 @@ export default function PartnersManagementPage() {
                 {paginationNode && <div className="px-4 lg:px-6">{paginationNode}</div>}
             </div>
 
-            <Sheet open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
-                    <SheetHeader>
-                        <SheetTitle>{t('partners.create')}</SheetTitle>
-                        <SheetDescription>{t('partners.subtitle')}</SheetDescription>
-                    </SheetHeader>
-                    <div className="h-full overflow-y-auto px-1 pb-10">
-                        <PartnerForm
-                            submitting={createMutation.isPending}
-                            onSubmit={handleCreateSubmit}
-                            onCancel={() => setIsCreateOpen(false)}
-                        />
-                    </div>
-                </SheetContent>
-            </Sheet>
+            <PartnerFormFullScreenSheet
+                open={isCreateOpen}
+                onClose={() => setIsCreateOpen(false)}
+                title={t('partners.create') as string}
+                description={subtitle}
+                submitting={createMutation.isPending}
+                onSubmit={handleCreateSubmit}
+            />
 
-            <Sheet open={!!editingPartner} onOpenChange={(open) => !open && setEditingPartner(null)}>
-                <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
-                    <SheetHeader>
-                        <SheetTitle>{t('partners.edit')}</SheetTitle>
-                        <SheetDescription>{t('partners.subtitle')}</SheetDescription>
-                    </SheetHeader>
-                    <div className="h-full overflow-y-auto px-1 pb-10">
-                        <PartnerForm
-                            initialValues={editingPartner ?? undefined}
-                            submitting={updateMutation.isPending}
-                            onSubmit={handleEditSubmit}
-                            onCancel={() => setEditingPartner(null)}
-                        />
-                    </div>
-                </SheetContent>
-            </Sheet>
+            <PartnerFormFullScreenSheet
+                open={!!editingPartner}
+                onClose={() => setEditingPartner(null)}
+                title={t('partners.edit') as string}
+                description={subtitle}
+                submitting={updateMutation.isPending}
+                onSubmit={handleEditSubmit}
+                initialValues={editingPartner}
+            />
 
             <PartnerDetailsDrawer
                 partner={viewingPartner}
