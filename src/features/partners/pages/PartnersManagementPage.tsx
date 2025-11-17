@@ -26,6 +26,7 @@ import useDebounced from '@/shared/hooks/useDebounced'
 import ErrorFallback from '@/components/layout/ErrorFallback'
 
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 50]
+const EMPTY_SELECT_VALUE = '__empty__'
 
 type FilterState = {
     business_type: PartnerListParams['business_type'] | ''
@@ -158,12 +159,21 @@ export default function PartnersManagementPage() {
                 </div>
             </div>
             <div className="grid flex-1 gap-3 md:grid-cols-3">
-                <Select value={filters.business_type ?? ''} onValueChange={(value) => setFilters((prev) => ({ ...prev, business_type: value as PartnerListParams['business_type'] }))}>
+                <Select
+                    value={filters.business_type ?? ''}
+                    onValueChange={(value) =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            business_type:
+                                value === EMPTY_SELECT_VALUE ? '' : (value as PartnerListParams['business_type']),
+                        }))
+                    }
+                >
                     <SelectTrigger>
                         <SelectValue placeholder={t('partners.filters.business_type') as string} />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">{t('partners.filters.business_type')}</SelectItem>
+                        <SelectItem value={EMPTY_SELECT_VALUE}>{t('partners.filters.business_type')}</SelectItem>
                         {businessOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                                 {option.label}
@@ -171,12 +181,21 @@ export default function PartnersManagementPage() {
                         ))}
                     </SelectContent>
                 </Select>
-                <Select value={filters.funnel_stage ?? ''} onValueChange={(value) => setFilters((prev) => ({ ...prev, funnel_stage: value as PartnerListParams['funnel_stage'] }))}>
+                <Select
+                    value={filters.funnel_stage ?? ''}
+                    onValueChange={(value) =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            funnel_stage:
+                                value === EMPTY_SELECT_VALUE ? '' : (value as PartnerListParams['funnel_stage']),
+                        }))
+                    }
+                >
                     <SelectTrigger>
                         <SelectValue placeholder={t('partners.filters.funnel_stage') as string} />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">{t('partners.filters.funnel_stage')}</SelectItem>
+                        <SelectItem value={EMPTY_SELECT_VALUE}>{t('partners.filters.funnel_stage')}</SelectItem>
                         {funnelOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                                 {option.label}
@@ -184,12 +203,21 @@ export default function PartnersManagementPage() {
                         ))}
                     </SelectContent>
                 </Select>
-                <Select value={filters.customer_level ?? ''} onValueChange={(value) => setFilters((prev) => ({ ...prev, customer_level: value as PartnerListParams['customer_level'] }))}>
+                <Select
+                    value={filters.customer_level ?? ''}
+                    onValueChange={(value) =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            customer_level:
+                                value === EMPTY_SELECT_VALUE ? '' : (value as PartnerListParams['customer_level']),
+                        }))
+                    }
+                >
                     <SelectTrigger>
                         <SelectValue placeholder={t('partners.filters.customer_level') as string} />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">{t('partners.filters.customer_level')}</SelectItem>
+                        <SelectItem value={EMPTY_SELECT_VALUE}>{t('partners.filters.customer_level')}</SelectItem>
                         {customerLevelOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                                 {option.label}
