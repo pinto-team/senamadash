@@ -67,6 +67,9 @@ type PartnerFormState = {
 const emptyContact = { label: '', number: '' }
 const emptySocial = { platform: '', url: '' }
 const emptyText = { value: '' }
+const EMPTY_SELECT_VALUE = '__empty__'
+
+const normalizeSelectValue = (value: string) => (value === EMPTY_SELECT_VALUE ? '' : value)
 
 function toFormState(partner?: PartnerData | null): PartnerFormState {
     return {
@@ -404,12 +407,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="credit_status"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.credit_status') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {creditOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -426,12 +432,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="partnership_status"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.partnership_status') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {partnershipOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -456,12 +465,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="potential"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.potential') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {potentialOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -500,12 +512,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="payment_type"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.payment_type') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {paymentOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -522,12 +537,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="sensitivity"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.sensitivity') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {sensitivityOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -544,12 +562,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="preferred_channel"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.preferred_channel') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {channelOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -566,12 +587,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="funnel_stage"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.funnel_stage') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {funnelOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -596,12 +620,15 @@ export function PartnerForm({ initialValues, submitting, onSubmit, onCancel }: P
                                 control={control}
                                 name="customer_level"
                                 render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select
+                                        value={field.value ?? ''}
+                                        onValueChange={(value) => field.onChange(normalizeSelectValue(value))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('partners.form.customer_level') as string} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">-</SelectItem>
+                                            <SelectItem value={EMPTY_SELECT_VALUE}>-</SelectItem>
                                             {customerLevelOptions.map((option) => (
                                                 <SelectItem key={option.value} value={option.value}>
                                                     {option.label}
