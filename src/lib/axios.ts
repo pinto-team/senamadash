@@ -234,6 +234,14 @@ export const catalogClient = createApiClient({
     enableRefresh: false,
 })
 
+/** CRM-scoped client for partner management */
+export const crmClient = createApiClient({
+    baseURL: API_CONFIG.CRM.BASE_URL || 'http://localhost:8000/crm-api',
+    feature: 'crm',
+    enableAuth: true,
+    enableRefresh: false,
+})
+
 /** Factory to create additional feature clients on demand */
 export function createFeatureClient(config: ClientConfig): AxiosInstance {
     return createApiClient(config)

@@ -31,6 +31,11 @@ export const API_ROUTES = {
     PRODUCTS: {
         ROOT: '/products',
     },
+    PARTNERS: {
+        ROOT: '/partners',
+        BY_ID: (id: string | number) => `/partners/${id}`,
+        SEARCH: '/partners/search',
+    },
 } as const
 
 export type ApiRoute = typeof API_ROUTES

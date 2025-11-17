@@ -30,6 +30,13 @@ export const API_CONFIG = {
             'http://localhost:3000',
     },
 
+    CRM: {
+        BASE_URL:
+            import.meta.env.VITE_CRM_API_URL ||
+            import.meta.env.VITE_API_URL ||
+            'http://localhost:8000/crm-api',
+    },
+
     // MSW configuration
     MSW: {
         ENABLED: import.meta.env.VITE_ENABLE_MSW === 'true',

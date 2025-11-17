@@ -18,6 +18,7 @@ import ListProductsPage from '@/features/products/pages/ListProducts'
 import AddProductPage from '@/features/products/pages/AddProduct'
 import DetailProductPage from '@/features/products/pages/DetailProduct'
 import EditProductPage from '@/features/products/pages/EditProduct'
+import PartnersManagementPage from '@/features/partners/pages/PartnersManagementPage'
 
 export const router = createBrowserRouter([
     {
@@ -42,6 +43,8 @@ export const router = createBrowserRouter([
                     { path: ROUTES.PRODUCT.NEW, element: <AddProductPage /> },
                     { path: ROUTES.PRODUCT.DETAIL(), element: <DetailProductPage /> },
                     { path: ROUTES.PRODUCT.EDIT(), element: <EditProductPage /> },
+
+                    { path: ROUTES.PARTNER.LIST, element: <PartnersManagementPage /> },
                 ],
             },
             { path: ROUTES.LOGIN, element: <LoginPage /> },
