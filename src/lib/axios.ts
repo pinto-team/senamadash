@@ -53,6 +53,36 @@ type ClientConfig = {
 /** Internal flag used to avoid infinite retry loops */
 const RETRY_FLAG = '__isRetryRequest'
 
+/**
+ * Custom params serializer that keeps unicode characters unencoded.
+ *
+ * Some of our backend endpoints expect Persian text in raw form and fail when
+ * axios percent-encodes the query parameters. By implementing our own
+ * serializer we can keep those characters intact while still handling arrays
+ * and filtering out nullish values.
+ */
+function serializeQueryParams(params?: Record<string, unknown>): string {
+    if (!params) return ''
+
+    const pairs: string[] = []
+
+    for (const [key, value] of Object.entries(params)) {
+        if (value === undefined || value === null) continue
+
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                if (item === undefined || item === null) continue
+                pairs.push(`${key}=${String(item)}`)
+            }
+            continue
+        }
+
+        pairs.push(`${key}=${String(value)}`)
+    }
+
+    return pairs.join('&')
+}
+
 // Single-flight refresh guard and queue for pending 401s
 let isRefreshing = false
 let pendingQueue: PendingResolver[] = []
@@ -86,6 +116,9 @@ function createApiClient(config: ClientConfig): AxiosInstance {
         baseURL: config.baseURL,
         headers: new AxiosHeaders({ 'Content-Type': 'application/json' }),
         timeout: 10000, // تایم‌اوت 10 ثانیه
+        paramsSerializer: {
+            serialize: serializeQueryParams,
+        },
     })
 
     if (config.feature) {
