@@ -18,23 +18,10 @@ export const API_ROUTES = {
         GET: (id: string | number) => `/files/${id}`,
         THUMBNAIL: (id: string | number) => `/files/${id}/thumbnail`,
     },
-    BRANDS: {
-        ROOT: '/brands',
-    },
-    CATEGORIES: {
-        ROOT: '/categories',
-        BY_ID: (id: string | number) => `/categories/${id}`,
-        ORDER: (id: string | number) => `/categories/${id}/order`,
-        REORDER: '/categories/reorder',
-        REORDER_BY_ID: (id: string | number) => `/categories/${id}/reorder`,
-    },
-    PRODUCTS: {
-        ROOT: '/products',
-    },
     PARTNERS: {
         ROOT: '/partners',
         BY_ID: (id: string | number) => `/partners/${id}`,
-        SEARCH: '/partners/search',
+        SEARCH: '/partners/search/',
     },
 } as const
 
