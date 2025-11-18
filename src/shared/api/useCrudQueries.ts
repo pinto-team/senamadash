@@ -7,14 +7,7 @@ export function createCrudHooks<TData, TCreate, TUpdate>(
     api: ReturnType<typeof import('./crudFactory').createCrudApi<TData, TCreate, TUpdate>>,
 ) {
     return {
-        /**
-         * Retrieve a list of items.
-         *
-         * The `params` argument becomes part of the React Query `queryKey` and is
-         * serialized with `JSON.stringify` for stability. Callers should memoize
-         * `params` (e.g. using `useMemo`) to avoid triggering unnecessary
-         * refetches on each render.
-         */
+
         useList: (params?: unknown) =>
             useQuery({
                 queryKey: [key, 'list', params ? JSON.stringify(params) : undefined],
@@ -31,12 +24,15 @@ export function createCrudHooks<TData, TCreate, TUpdate>(
         useCreate: () => {
             const qc = useQueryClient()
             return useMutation({
-                mutationFn: api.create,
+                // mutationFn باید تنها یک پارامتر بگیرد
+                mutationFn: (payload: TCreate) => api.create(payload),
+
                 onSuccess: (data) => {
                     qc.invalidateQueries({ queryKey: [key, 'list'] })
                     const id = (data as any)?.data?.id
-                    if (id !== undefined && id !== null)
+                    if (id !== undefined && id !== null) {
                         qc.invalidateQueries({ queryKey: [key, 'detail', id] })
+                    }
                 },
             })
         },
@@ -56,7 +52,9 @@ export function createCrudHooks<TData, TCreate, TUpdate>(
         useDelete: () => {
             const qc = useQueryClient()
             return useMutation<ApiResponse<void>, AxiosError<ApiResponse<unknown>>, string | number>({
-                mutationFn: api.remove,
+                // mutationFn باید فقط (id) بگیرد
+                mutationFn: (id: string | number) => api.remove(id),
+
                 onSuccess: (_, id) => {
                     qc.invalidateQueries({ queryKey: [key, 'list'] })
                     qc.invalidateQueries({ queryKey: [key, 'detail', id] })
