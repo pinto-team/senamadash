@@ -5,9 +5,10 @@ import AppRoot from '@/app/App'
 import { ROUTES } from '@/app/routes/routes'
 import LoginPage from '@/features/auth/pages/LoginPage'
 import DashboardPage from '@/features/dashboard/pages/DashboardPage'
+import { PartnersManagementPage } from '@/features/partners/pages/PartnersManagementPage'
+
 import NotFound from './NotFound'
 import ProtectedRoute from './ProtectedRoute'
-import PartnersManagementPage from '@/features/partners/pages/PartnersManagementPage'
 
 export const router = createBrowserRouter([
     {

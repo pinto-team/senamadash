@@ -2,6 +2,7 @@ import { Toaster } from "sonner"
 import { Suspense } from "react"
 import { Outlet } from "react-router-dom"
 import { useI18n } from "@/shared/hooks/useI18n"
+import 'leaflet/dist/leaflet.css'
 
 import AppErrorBoundary from "@/components/layout/AppErrorBoundary"
 

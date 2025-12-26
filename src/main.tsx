@@ -10,6 +10,7 @@ import ThemeProvider from '@/app/providers/theme/ThemeProvider.tsx'
 import { router } from '@/app/routes'
 // Initialize i18n
 import '@/shared/i18n/i18n'
+import 'leaflet/dist/leaflet.css'
 
 import './index.css'
 

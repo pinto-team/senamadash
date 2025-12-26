@@ -4,28 +4,42 @@ import type {
     PartnerDetailResponse,
     PartnerListParams,
     PartnerListResponse,
-    PartnerPayload,
+    PartnerQuickEntryPayload,
+    PartnerIdentity,
+    PartnerRelationship,
+    PartnerFinancialEstimation,
+    PartnerAnalysis,
+    PartnerAcquisition,
 } from '@/features/partners/model/types'
-
-const ROOT = API_ROUTES.PARTNERS.ROOT
-const SEARCH = API_ROUTES.PARTNERS.SEARCH
 
 export const partnersApi = {
     list: (params?: PartnerListParams) =>
-        crmClient.get<PartnerListResponse>(ROOT, { params }).then((r) => r.data),
-
-    search: (params?: PartnerListParams) =>
-        crmClient.get<PartnerListResponse>(SEARCH, { params }).then((r) => r.data),
+        crmClient.get<PartnerListResponse>(API_ROUTES.PARTNERS.ROOT, { params }).then((r) => r.data),
 
     detail: (id: string) =>
         crmClient.get<PartnerDetailResponse>(API_ROUTES.PARTNERS.BY_ID(id)).then((r) => r.data),
 
-    create: (payload: PartnerPayload) =>
-        crmClient.post<PartnerDetailResponse>(ROOT, payload).then((r) => r.data),
+    // Create (identity minimal)
+    quickEntry: (payload: PartnerQuickEntryPayload) =>
+        crmClient.post<PartnerDetailResponse>(API_ROUTES.PARTNERS.QUICK_ENTRY, payload).then((r) => r.data),
 
-    update: (id: string, payload: PartnerPayload) =>
-        crmClient.put<PartnerDetailResponse>(API_ROUTES.PARTNERS.BY_ID(id), payload).then((r) => r.data),
+    // Edit identity (needed for full edit)
+    updateIdentity: (id: string, payload: Partial<PartnerIdentity>) =>
+        crmClient.patch<PartnerDetailResponse>(API_ROUTES.PARTNERS.IDENTITY(id), payload).then((r) => r.data),
 
+    updateRelationship: (id: string, payload: Partial<PartnerRelationship>) =>
+        crmClient.patch<PartnerDetailResponse>(API_ROUTES.PARTNERS.RELATIONSHIP(id), payload).then((r) => r.data),
+
+    updateFinancialEstimation: (id: string, payload: Partial<PartnerFinancialEstimation>) =>
+        crmClient.patch<PartnerDetailResponse>(API_ROUTES.PARTNERS.FINANCIAL_ESTIMATION(id), payload).then((r) => r.data),
+
+    updateAnalysis: (id: string, payload: Partial<PartnerAnalysis>) =>
+        crmClient.patch<PartnerDetailResponse>(API_ROUTES.PARTNERS.ANALYSIS(id), payload).then((r) => r.data),
+
+    updateAcquisition: (id: string, payload: Partial<PartnerAcquisition>) =>
+        crmClient.patch<PartnerDetailResponse>(API_ROUTES.PARTNERS.ACQUISITION(id), payload).then((r) => r.data),
+
+    // Delete
     remove: (id: string) =>
         crmClient.delete(API_ROUTES.PARTNERS.BY_ID(id)).then((r) => r.data),
 }

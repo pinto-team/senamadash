@@ -20,9 +20,19 @@ export const API_ROUTES = {
     },
     PARTNERS: {
         ROOT: '/partners',
+        QUICK_ENTRY: '/partners/quick-entry',
         BY_ID: (id: string | number) => `/partners/${id}`,
-        SEARCH: '/partners/search/',
+
+        IDENTITY: (id: string | number) => `/partners/${id}/identity`, // برای Edit Identity
+
+        RELATIONSHIP: (id: string | number) => `/partners/${id}/relationship`,
+        ANALYSIS: (id: string | number) => `/partners/${id}/analysis`,
+        FINANCIAL_ESTIMATION: (id: string | number) => `/partners/${id}/financial-estimation`,
+        ACQUISITION: (id: string | number) => `/partners/${id}/acquisition`,
     },
+
+
+
 } as const
 
 export type ApiRoute = typeof API_ROUTES
