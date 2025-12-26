@@ -28,6 +28,8 @@ L.Icon.Default.mergeOptions({
 
 const TEHRAN_CENTER: [number, number] = [35.6892, 51.389]
 
+const LABEL_CLASS = 'text-sm font-medium text-muted-foreground'
+
 type Props = {
     disabled: boolean
     location: PartnerLocation | null
@@ -71,9 +73,9 @@ export function LocationPicker({
         : TEHRAN_CENTER
 
     return (
-        <div className="space-y-3">
-            {/* Map */}
-            <div className="rounded-lg border overflow-hidden">
+        <div className="space-y-4">
+            {/* ===== Map ===== */}
+            <div className="overflow-hidden rounded-lg border">
                 <MapContainer
                     center={center}
                     zoom={location ? 14 : 11}
@@ -100,14 +102,16 @@ export function LocationPicker({
                 </MapContainer>
             </div>
 
-            {/* Lat / Lng inputs */}
-            <div className="grid gap-3 md:grid-cols-2">
-                <div>
-                    <label className="text-sm font-medium">
+            {/* ===== Latitude / Longitude ===== */}
+            <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-1">
+                    <label className={LABEL_CLASS}>
                         {t('partners.form.latitude')}
                     </label>
                     <Input
                         disabled={disabled}
+                        dir="ltr"
+                        placeholder={t('partners.form.latitude')}
                         value={location?.latitude ?? ''}
                         onChange={(e) => {
                             const v = e.target.value.trim()
@@ -125,12 +129,14 @@ export function LocationPicker({
                     />
                 </div>
 
-                <div>
-                    <label className="text-sm font-medium">
+                <div className="space-y-1">
+                    <label className={LABEL_CLASS}>
                         {t('partners.form.longitude')}
                     </label>
                     <Input
                         disabled={disabled}
+                        dir="ltr"
+                        placeholder={t('partners.form.longitude')}
                         value={location?.longitude ?? ''}
                         onChange={(e) => {
                             const v = e.target.value.trim()
@@ -149,8 +155,8 @@ export function LocationPicker({
                 </div>
             </div>
 
-            {/* Footer */}
-            <div className="flex justify-between items-center">
+            {/* ===== Footer ===== */}
+            <div className="flex items-center justify-between gap-4">
                 <p className="text-sm text-muted-foreground">
                     {t('partners.form.location_help')}
                 </p>

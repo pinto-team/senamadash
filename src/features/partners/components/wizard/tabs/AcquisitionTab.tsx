@@ -4,6 +4,7 @@ import { TabsContent } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
+import { LabeledField } from '@/features/partners/components/form/LabeledField'
 import type { WizardFormValues, WizardMode } from '../PartnerWizard.types'
 import { useI18n } from '@/shared/hooks/useI18n'
 import type { AcquisitionSource } from '@/features/partners/model/types'
@@ -31,39 +32,46 @@ export function AcquisitionTab({ form, mode }: Props) {
     const current = watch('acquisition.source')
 
     return (
-        <TabsContent value="acquisition" className="mt-6 space-y-6">
-            <div>
-                <div className="mb-2 text-sm font-medium">
-                    {t('partners.form.acquisition_source')}
-                </div>
-
+        <TabsContent
+            value="acquisition"
+            dir="rtl"
+            className="mt-6 space-y-6 text-right"
+        >
+            {/* ===== Acquisition source ===== */}
+            <LabeledField label={t('partners.form.acquisition_source')}>
                 <div className="flex flex-wrap gap-2">
-                    {SOURCES.map((src) => (
-                        <Button
-                            key={src}
-                            type="button"
-                            disabled={isView}
-                            variant={current === src ? 'default' : 'outline'}
-                            onClick={() =>
-                                setValue('acquisition.source', src, { shouldDirty: true })
-                            }
-                        >
-                            {t(`partners.enums.acquisition_source.${src}`)}
-                        </Button>
-                    ))}
-                </div>
-            </div>
+                    {SOURCES.map((src) => {
+                        const isActive = current === src
 
-            <div>
-                <div className="mb-2 text-sm font-medium">
-                    {t('partners.form.acquisition_note')}
+                        return (
+                            <Button
+                                key={src}
+                                type="button"
+                                disabled={isView}
+                                size="sm"
+                                variant={isActive ? 'default' : 'outline'}
+                                className={isActive ? '' : 'text-muted-foreground'}
+                                onClick={() =>
+                                    setValue('acquisition.source', src, {
+                                        shouldDirty: true,
+                                    })
+                                }
+                            >
+                                {t(`partners.enums.acquisition_source.${src}`)}
+                            </Button>
+                        )
+                    })}
                 </div>
+            </LabeledField>
 
+            {/* ===== Note ===== */}
+            <LabeledField label={t('partners.form.acquisition_note')}>
                 <Textarea
                     disabled={isView}
+                    placeholder={t('partners.form.acquisition_note')}
                     {...register('acquisition.source_note')}
                 />
-            </div>
+            </LabeledField>
         </TabsContent>
     )
 }

@@ -95,7 +95,6 @@
   "partners.form.crm": "سیگنال‌های CRM",
   "partners.form.preferences": "ترجیحات",
   "partners.form.lists": "لیست‌ها",
-  "partners.form.tags": "برچسب‌ها",
   "partners.form.purchased_products": "محصولات خریداری‌شده",
   "partners.form.brand_name": "نام برند",
   "partners.form.manager_full_name": "نام کامل مدیر",
@@ -103,7 +102,6 @@
   "partners.form.category": "دسته",
   "partners.form.sub_category": "زیر‌دسته",
   "partners.form.address": "آدرس",
-  "partners.form.tags_hint": "برچسب‌های مرتبط با شریک",
   "partners.form.purchased_products_hint": "محصولات خریداری‌شده قبلی",
   "partners.form.location_hint": "مختصات اختیاری (WGS84)",
   "partners.form.first_transaction_date": "تاریخ اولین تراکنش",
@@ -123,9 +121,8 @@
   "partners.form.team_size": "اندازه تیم",
   "partners.form.satisfaction": "رضایت (۰ تا ۵)",
   "partners.form.payment_type": "نوع پرداخت",
-  "partners.form.sensitivity": "حساسیت",
-  "partners.form.preferred_channel": "کانال ترجیحی",
-  "partners.form.funnel_stage": "مرحله قیف",
+  "partners.form.sensitivity": "حساسیت مشتری",
+  "partners.form.preferred_channel": "شبکه اجتماعی ترجیحی",
   "partners.form.how_found": "نحوه آشنایی",
   "partners.form.customer_type": "نوع مشتری",
   "partners.form.customer_level": "سطح مشتری",
@@ -152,9 +149,6 @@
   "partners.enums.partnership_status.past": "گذشته",
   "partners.enums.partnership_status.present": "جاری",
   "partners.enums.partnership_status.future": "آتی",
-  "partners.enums.potential.low": "کم",
-  "partners.enums.potential.medium": "متوسط",
-  "partners.enums.potential.high": "زیاد",
   "partners.enums.preferred_channel.phone": "تلفن",
   "partners.enums.preferred_channel.whatsapp": "واتساپ",
   "partners.enums.preferred_channel.instagram": "اینستاگرام",
@@ -162,11 +156,6 @@
   "partners.enums.preferred_channel.email": "ایمیل",
   "partners.enums.preferred_channel.in_person": "حضوری",
   "partners.enums.preferred_channel.other": "سایر",
-  "partners.enums.funnel_stage.prospect": "سرنخ",
-  "partners.enums.funnel_stage.lead": "لید",
-  "partners.enums.funnel_stage.qualified": "واجد شرایط",
-  "partners.enums.funnel_stage.customer": "مشتری",
-  "partners.enums.funnel_stage.churned": "رها کرده",
   "partners.enums.customer_level.A": "سطح A",
   "partners.enums.customer_level.B": "سطح B",
   "partners.enums.customer_level.C": "سطح C",
@@ -337,12 +326,7 @@
   "partners.enums.business_type.furniture_showroom": "نمایشگاه مبل",
   "partners.enums.business_type.furniture_manufacturer": "تولیدکننده مبل",
   "partners.enums.business_type.furniture_distributor": "پخش‌کننده مبل",
-  "partners.enums.financial_level.strong": "توان مالی بالا",
-  "partners.enums.financial_level.medium": "توان مالی متوسط",
-  "partners.enums.financial_level.weak": "توان مالی ضعیف",
-  "partners.enums.purchase_readiness.low": "احتمال خرید کم",
-  "partners.enums.purchase_readiness.medium": "نیاز به پیگیری",
-  "partners.enums.purchase_readiness.high": "آماده خرید",
+
 
   "partners.enums.credit_status.good": "خوش‌حساب",
   "partners.enums.credit_status.normal": "حساب معمولی",
@@ -402,7 +386,7 @@
 
   "partners.form.acquisition_source": "نحوه آشنایی",
   "partners.form.acquisition_note": "توضیح نحوه آشنایی",
-  "partners.form.payment_types": "روش‌های پرداخت",
+  "partners.form.payment_types": "مشتری از کدام روش ها برای پرداخت هزینه های خود استفاده کرده است",
   "partners.form.financial_level": "سطح توان مالی",
   "partners.form.purchase_readiness": "آمادگی خرید",
   "partners.form.estimation_note": "یادداشت تخمین",
@@ -424,7 +408,7 @@
   "partners.wizard.errors.identity_required": "نام کسب‌وکار، نوع کسب‌وکار و حداقل یک شماره تماس الزامی است.",
   "partners.wizard.actions.save_identity": "ذخیره و ادامه",
   "partners.wizard.actions.save_section": "ذخیره این بخش",
-  "partners.wizard.actions.finish": "پایان",
+  "partners.wizard.actions.finish": "ذخیره",
 
   "partners.enums.acquisition_source.marketing": "بازاریابی",
   "partners.enums.acquisition_source.self_search": "جستجوی شخصی",
@@ -482,6 +466,28 @@
   "partners.address.neighborhoods.nematabad": "نعمت‌آباد",
   "partners.address.neighborhoods.yaftabad": "یافت‌آباد",
 
-  "partners.confirm.delete_description_generic": "این عملیات قابل بازگشت نیست و شریک به‌صورت دائمی حذف می‌شود."
+  "partners.confirm.delete_description_generic": "این عملیات قابل بازگشت نیست و شریک به‌صورت دائمی حذف می‌شود.",
+
+
+
+  "partners.enums.potential.low": "پتانسیل خرید کم",
+  "partners.enums.potential.medium": "پتانسیل خرید متوسط",
+  "partners.enums.potential.high": "پتانسیل خرید بالا",
+  "partners.enums.financial_level.strong": "توان پرداخت بالا",
+  "partners.enums.financial_level.medium": "توان پرداخت متوسط",
+  "partners.enums.financial_level.weak": "توان پرداخت پایین",
+  "partners.enums.purchase_readiness.low": "فعلاً قصد خرید ندارد",
+  "partners.enums.purchase_readiness.medium": "نیاز به پیگیری دارد",
+  "partners.enums.purchase_readiness.high": "آماده خرید است",
+  "partners.form.tags": "ویژگی‌ها یا توضیحات کوتاه",
+  "partners.form.tags_hint": "مثلاً: خوش‌حساب، VIP، نیاز به پیگیری",
+  "partners.form.funnel_stage": "وضعیت ارتباط با این شریک",
+
+  "partners.enums.funnel_stage.prospect": "فقط آشنا شده‌ایم",
+  "partners.enums.funnel_stage.lead": "در حال گفتگو و پیگیری",
+  "partners.enums.funnel_stage.qualified": "ارزش همکاری دارد",
+  "partners.enums.funnel_stage.customer": "همکاری فعال داریم",
+  "partners.enums.funnel_stage.churned": "همکاری متوقف شده"
+
 
 }

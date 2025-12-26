@@ -1,5 +1,6 @@
 import { Controller, UseFormReturn, useFieldArray } from 'react-hook-form'
 import { Plus, X } from 'lucide-react'
+import { useEffect } from 'react'
 
 import { TabsContent } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
@@ -14,10 +15,10 @@ import {
 } from '@/components/ui/select'
 
 import { LocationPicker } from '../components/LocationPicker'
+import { LabeledField } from '@/features/partners/components/form/LabeledField'
 import type { WizardFormValues, WizardMode } from '../PartnerWizard.types'
 import { useI18n } from '@/shared/hooks/useI18n'
 import type { BusinessType, SocialPlatform } from '@/features/partners/model/types'
-import { useEffect } from 'react'
 
 const EMPTY = '__empty__'
 
@@ -73,72 +74,66 @@ export function IdentityTab({ form, mode }: Props) {
             contactsFA.append({ label: 'mobile', number: '', custom_label: '' })
         }
         if (socialsFA.fields.length === 0) {
-            socialsFA.append({ platform: '', url: '', custom_label: '' })
+            socialsFA.append({ platform: 'instagram', url: '', custom_label: '' })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isView])
 
     return (
-        <TabsContent
-            value="identity"
-            dir="rtl"
-            className="mt-6 space-y-8 text-right"
-        >
+        <TabsContent value="identity" dir="rtl" className="mt-6 space-y-8 text-right">
+            {/* ===== Basic Info ===== */}
+            <div className="grid gap-6 md:grid-cols-3">
+                <LabeledField label={t('partners.form.brand_name')} required>
+                    <Input
+                        disabled={isView}
+                        placeholder={t('partners.form.brand_name')}
+                        {...register('identity.brand_name')}
+                    />
+                </LabeledField>
 
-        {/* -------- Basic Info (one horizontal row) -------- */}
-            <div className="grid gap-3 md:grid-cols-3">
-                <Input
-                    disabled={isView}
-                    placeholder={t('partners.form.brand_name')}
-                    {...register('identity.brand_name')}
-                />
+                <LabeledField label={t('partners.form.manager_full_name')}>
+                    <Input
+                        disabled={isView}
+                        placeholder={t('partners.form.manager_full_name')}
+                        {...register('identity.manager_full_name')}
+                    />
+                </LabeledField>
 
-                <Input
-                    disabled={isView}
-                    placeholder={t('partners.form.manager_full_name')}
-                    {...register('identity.manager_full_name')}
-                />
-
-                <Controller
-                    control={control}
-                    name="identity.business_type"
-                    render={({ field }) => (
-                        <Select
-                            value={field.value || ''}
-                            disabled={isView}
-                            onValueChange={(v) =>
-                                field.onChange(v === EMPTY ? '' : (v as BusinessType))
-                            }
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder={t('partners.form.business_type')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value={EMPTY}>—</SelectItem>
-                                <SelectItem value="furniture_showroom">نمایشگاه</SelectItem>
-                                <SelectItem value="furniture_manufacturer">تولیدکننده</SelectItem>
-                                <SelectItem value="furniture_distributor">پخش‌کننده</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    )}
-                />
+                <LabeledField label={t('partners.form.business_type')}>
+                    <Controller
+                        control={control}
+                        name="identity.business_type"
+                        render={({ field }) => (
+                            <Select
+                                value={field.value || ''}
+                                disabled={isView}
+                                onValueChange={(v) =>
+                                    field.onChange(v === EMPTY ? '' : (v as BusinessType))
+                                }
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder={t('partners.form.business_type')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value={EMPTY}>—</SelectItem>
+                                    <SelectItem value="furniture_showroom">نمایشگاه</SelectItem>
+                                    <SelectItem value="furniture_manufacturer">تولیدکننده</SelectItem>
+                                    <SelectItem value="furniture_distributor">پخش‌کننده</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                </LabeledField>
             </div>
 
-            {/* -------- Contact & Social (two columns) -------- */}
-            <div className="grid gap-6 md:grid-cols-2">
-                {/* ================== Contact Numbers ================== */}
-                <div className="space-y-3">
-        <span className="text-sm text-muted-foreground">
-            {t('partners.form.contact_numbers')}
-        </span>
-
+            {/* ===== Contact Numbers ===== */}
+            <LabeledField label={t('partners.form.contact_numbers')}>
+                <div className="space-y-2">
                     {contactsFA.fields.map((f, idx) => {
-                        const isSingle = contactsFA.fields.length === 1
                         const labelValue = watch(`identity.contact_numbers.${idx}.label`)
 
                         return (
-                            <div key={f.id} className="flex items-center gap-2">
-                                {/* label */}
+                            <div key={f.id} className="flex items-start gap-2">
                                 <Controller
                                     control={control}
                                     name={`identity.contact_numbers.${idx}.label`}
@@ -149,7 +144,7 @@ export function IdentityTab({ form, mode }: Props) {
                                             onValueChange={field.onChange}
                                         >
                                             <SelectTrigger className="w-28">
-                                                <SelectValue />
+                                                <SelectValue placeholder="نوع" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {PHONE_LABEL_OPTIONS.map((o) => (
@@ -162,82 +157,54 @@ export function IdentityTab({ form, mode }: Props) {
                                     )}
                                 />
 
-                                {/* custom label */}
                                 {labelValue === 'other' && (
                                     <Input
                                         className="w-32"
                                         disabled={isView}
                                         placeholder="عنوان دلخواه"
-                                        {...register(
-                                            `identity.contact_numbers.${idx}.custom_label`,
-                                        )}
+                                        {...register(`identity.contact_numbers.${idx}.custom_label`)}
                                     />
                                 )}
 
-                                {/* number */}
                                 <Input
                                     className="flex-1"
                                     disabled={isView}
                                     dir="ltr"
-                                    inputMode="tel"
-                                    placeholder="09xxxxxxxx / 021xxxxxxx"
-                                    {...register(
-                                        `identity.contact_numbers.${idx}.number`,
-                                    )}
+                                    placeholder="شماره تماس"
+                                    {...register(`identity.contact_numbers.${idx}.number`)}
                                 />
 
-                                {/* action */}
-                                <div className="flex items-center">
-                                    {idx === 0 ? (
-                                        <Button
-                                            type="button"
-                                            size="icon"
-                                            variant="ghost"
-                                            disabled={isView}
-                                            onClick={() =>
-                                                contactsFA.append({
-                                                    label: 'mobile',
-                                                    number: '',
-                                                    custom_label: '',
-                                                })
-                                            }
-                                            aria-label="افزودن"
-                                        >
-                                            <Plus className="h-4 w-4 text-muted-foreground" />
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            type="button"
-                                            size="icon"
-                                            variant="ghost"
-                                            disabled={isView}
-                                            onClick={() => contactsFA.remove(idx)}
-                                            aria-label="حذف"
-                                        >
-                                            <X className="h-4 w-4 text-muted-foreground" />
-                                        </Button>
-                                    )}
-                                </div>
+                                <Button
+                                    type="button"
+                                    size="icon"
+                                    variant="ghost"
+                                    disabled={isView}
+                                    onClick={() =>
+                                        idx === 0
+                                            ? contactsFA.append({
+                                                label: 'mobile',
+                                                number: '',
+                                                custom_label: '',
+                                            })
+                                            : contactsFA.remove(idx)
+                                    }
+                                >
+                                    {idx === 0 ? <Plus className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                                </Button>
                             </div>
                         )
                     })}
                 </div>
+            </LabeledField>
 
-                {/* ================== Social Links ================== */}
-                <div className="space-y-3">
-        <span className="text-sm text-muted-foreground">
-            {t('partners.form.social_links')}
-        </span>
-
+            {/* ===== Social Links ===== */}
+            <LabeledField label={t('partners.form.social_links')}>
+                <div className="space-y-2">
                     {socialsFA.fields.map((f, idx) => {
-                        const isSingle = socialsFA.fields.length === 1
-                        const platformValue = watch(
-                            `identity.social_links.${idx}.platform`,
-                        )
+                        const platformValue = watch(`identity.social_links.${idx}.platform`)
 
                         return (
-                            <div key={f.id} className="flex items-center gap-2">
-                                {/* platform */}
+                            <div key={f.id} className="flex items-start gap-2">
                                 <Controller
                                     control={control}
                                     name={`identity.social_links.${idx}.platform`}
@@ -246,21 +213,16 @@ export function IdentityTab({ form, mode }: Props) {
                                             value={field.value || ''}
                                             disabled={isView}
                                             onValueChange={(v) =>
-                                                field.onChange(
-                                                    v === EMPTY ? '' : (v as any),
-                                                )
+                                                field.onChange(v === EMPTY ? '' : (v as SocialPlatform))
                                             }
                                         >
                                             <SelectTrigger className="w-28">
-                                                <SelectValue />
+                                                <SelectValue placeholder="پلتفرم" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value={EMPTY}>—</SelectItem>
                                                 {SOCIAL_PLATFORM_OPTIONS.map((o) => (
-                                                    <SelectItem
-                                                        key={o.value}
-                                                        value={o.value}
-                                                    >
+                                                    <SelectItem key={o.value} value={o.value}>
                                                         {o.label}
                                                     </SelectItem>
                                                 ))}
@@ -269,88 +231,61 @@ export function IdentityTab({ form, mode }: Props) {
                                     )}
                                 />
 
-                                {/* custom platform */}
                                 {platformValue === 'other' && (
                                     <Input
                                         className="w-32"
                                         disabled={isView}
                                         placeholder="نام پلتفرم"
-                                        {...register(
-                                            `identity.social_links.${idx}.custom_label` as any,
-                                        )}
+                                        {...register(`identity.social_links.${idx}.custom_label` as any)}
                                     />
                                 )}
 
-                                {/* url */}
                                 <Input
                                     className="flex-1"
                                     disabled={isView}
                                     dir="ltr"
                                     placeholder="https://"
-                                    {...register(
-                                        `identity.social_links.${idx}.url`,
-                                    )}
+                                    {...register(`identity.social_links.${idx}.url`)}
                                 />
 
-                                {/* action */}
-                                <div className="flex items-center">
-                                    {idx === 0 ? (
-                                        <Button
-                                            type="button"
-                                            size="icon"
-                                            variant="ghost"
-                                            disabled={isView}
-                                            onClick={() =>
-                                                socialsFA.append({
-                                                    platform: 'instagram',
-                                                    url: '',
-                                                    custom_label: '',
-                                                })
-                                            }
-                                            aria-label="افزودن"
-                                        >
-                                            <Plus className="h-4 w-4 text-muted-foreground" />
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            type="button"
-                                            size="icon"
-                                            variant="ghost"
-                                            disabled={isView}
-                                            onClick={() => socialsFA.remove(idx)}
-                                            aria-label="حذف"
-                                        >
-                                            <X className="h-4 w-4 text-muted-foreground" />
-                                        </Button>
-                                    )}
-                                </div>
+                                <Button
+                                    type="button"
+                                    size="icon"
+                                    variant="ghost"
+                                    disabled={isView}
+                                    onClick={() =>
+                                        idx === 0
+                                            ? socialsFA.append({
+                                                platform: 'instagram',
+                                                url: '',
+                                                custom_label: '',
+                                            })
+                                            : socialsFA.remove(idx)
+                                    }
+                                >
+                                    {idx === 0 ? <Plus className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                                </Button>
                             </div>
                         )
                     })}
                 </div>
-            </div>
+            </LabeledField>
 
-
-            {/* -------- Location -------- */}
-            <Controller
-                control={control}
-                name="identity.location"
-                render={({ field }) => (
-                    <LocationPicker
-                        disabled={isView}
-                        location={field.value ?? null}
-                        onChange={field.onChange}
-                        t={t}
-                    />
-                )}
-            />
-
-            {/* -------- Notes -------- */}
-            <Textarea
-                disabled={isView}
-                placeholder={t('partners.form.notes')}
-                {...register('identity.notes')}
-            />
+            {/* ===== Location ===== */}
+            <LabeledField label={t('partners.form.location')}>
+                <Controller
+                    control={control}
+                    name="identity.location"
+                    render={({ field }) => (
+                        <LocationPicker
+                            disabled={isView}
+                            location={field.value ?? null}
+                            onChange={field.onChange}
+                            t={t}
+                        />
+                    )}
+                />
+            </LabeledField>
         </TabsContent>
     )
 }

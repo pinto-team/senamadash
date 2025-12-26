@@ -219,7 +219,8 @@ export function PartnerWizardSheet({
                     <div className="border-b px-6 py-4">
                         <SheetHeader className="gap-2 p-0">
                             <div className="flex items-start justify-between gap-3">
-                                <div>
+                                {/* 👇 فقط این div تغییر کرده */}
+                                <div className="pr-10">
                                     <SheetTitle className="text-2xl font-bold">
                                         {mode === 'create'
                                             ? t('partners.wizard.title.create')
@@ -233,6 +234,9 @@ export function PartnerWizardSheet({
                                 </div>
 
                                 <div className="flex items-center gap-2">
+                                    <Button type="button" variant="outline" onClick={onClose}>
+                                        {t('partners.form.cancel')}
+                                    </Button>
                                     <Button type="button" onClick={wizard.finish} disabled={isView && false}>
                                         {t('partners.wizard.actions.finish')}
                                     </Button>
@@ -240,6 +244,7 @@ export function PartnerWizardSheet({
                             </div>
                         </SheetHeader>
                     </div>
+
 
                     {/* Body */}
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
@@ -265,16 +270,6 @@ export function PartnerWizardSheet({
                                 <AcquisitionTab form={form} mode={mode} />
                             </Tabs>
 
-                            {/* Footer */}
-                            <div className="mt-6 flex items-center justify-between gap-3">
-                                <Button type="button" variant="outline" onClick={onClose}>
-                                    {t('partners.form.cancel')}
-                                </Button>
-
-                                <Button type="button" onClick={wizard.finish}>
-                                    {t('partners.wizard.actions.finish')}
-                                </Button>
-                            </div>
                         </div>
                     </div>
                 </div>

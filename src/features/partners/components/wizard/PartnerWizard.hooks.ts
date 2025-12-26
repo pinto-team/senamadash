@@ -1,10 +1,10 @@
+import { useEffect, useRef, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import type { WizardFormValues, WizardMode, WizardTab } from './PartnerWizard.types'
 
 import {
-    useDeletePartner,
     useQuickEntryPartner,
     useUpdatePartnerAcquisition,
     useUpdatePartnerAnalysis,
@@ -52,6 +52,19 @@ const splitTags = (input?: string): string[] | null => {
     return tags.length ? tags : null
 }
 
+function normalizeErrorMessage(err: unknown, fallback: string) {
+    // اگر hookهای شما خطا را با شکل خاصی می‌دهند، اینجا بهترش کن
+    if (err && typeof err === 'object') {
+        const anyErr = err as any
+        const msg =
+            anyErr?.response?.data?.message ||
+            anyErr?.data?.message ||
+            anyErr?.message
+        if (typeof msg === 'string' && msg.trim()) return msg
+    }
+    return fallback
+}
+
 /* ----------------------------------
  * Hook
  * ---------------------------------- */
@@ -77,10 +90,24 @@ export function usePartnerWizardLogic({
     const updateFinancial = useUpdatePartnerFinancialEstimation()
     const updateAnalysis = useUpdatePartnerAnalysis()
     const updateAcquisition = useUpdatePartnerAcquisition()
-    const deletePartner = useDeletePartner()
 
     const isView = mode === 'view'
-    let partnerId: string | null = partner?.id ?? null
+
+    // ✅ MUST persist across re-renders
+    const partnerIdRef = useRef<string | null>(partner?.id ?? null)
+
+    // ✅ prevent concurrent create
+    const creatingRef = useRef<Promise<string | null> | null>(null)
+
+    // ✅ prevent double finish / autosave overlap
+    const [submitting, setSubmitting] = useState(false)
+
+    // ✅ sync when parent changes partner (edit/view)
+    useEffect(() => {
+        partnerIdRef.current = partner?.id ?? null
+        // also clear any in-flight create (defensive)
+        creatingRef.current = null
+    }, [partner?.id])
 
     /* -----------------------------
      * Partner creation (ONLY brand_name)
@@ -92,37 +119,52 @@ export function usePartnerWizardLogic({
     }
 
     async function ensurePartnerId(): Promise<string | null> {
-        if (partnerId) return partnerId
+        if (partnerIdRef.current) return partnerIdRef.current
         if (isView) return null
         if (!hasMinimumQuickEntry()) return null
 
-        const v = form.getValues().identity
+        // ✅ if a create is already running, await it instead of creating again
+        if (creatingRef.current) return creatingRef.current
 
-        const contact_numbers: PartnerContactNumber[] =
-            v.contact_numbers
-                ?.filter((c) => isNonEmpty(c.number))
-                .map((c) => ({
-                    label: c.label,
-                    number: c.number!.trim(), // ✅ safe after filter
-                })) ?? []
+        creatingRef.current = (async () => {
+            try {
+                const v = form.getValues().identity
 
-        const payload: PartnerQuickEntryPayload = {
-            brand_name: v.brand_name.trim(),
-            manager_full_name: isNonEmpty(v.manager_full_name)
-                ? v.manager_full_name.trim()
-                : null,
-            business_type: v.business_type || null,
-            contact_numbers,
-            province: v.province || null,
-            city: v.city || null,
-            location: v.location ?? null,
-            notes: v.notes || null,
-        }
+                const contact_numbers: PartnerContactNumber[] =
+                    v.contact_numbers
+                        ?.filter((c) => isNonEmpty(c.number))
+                        .map((c) => ({
+                            label: c.label,
+                            number: c.number!.trim(),
+                        })) ?? []
 
-        const res = await quickEntry.mutateAsync(payload)
-        partnerId = res.data.id
-        toast.success('ذخیره شد')
-        return partnerId
+                const payload: PartnerQuickEntryPayload = {
+                    brand_name: v.brand_name.trim(),
+                    manager_full_name: isNonEmpty(v.manager_full_name)
+                        ? v.manager_full_name.trim()
+                        : null,
+                    business_type: v.business_type || null,
+                    contact_numbers,
+                    province: v.province || null,
+                    city: v.city || null,
+                    location: v.location ?? null,
+                    notes: v.notes || null,
+                }
+
+                const res = await quickEntry.mutateAsync(payload)
+
+                partnerIdRef.current = res.data.id
+                toast.success('ذخیره شد')
+                return partnerIdRef.current
+            } catch (e) {
+                toast.error(normalizeErrorMessage(e, 'خطا در ایجاد شریک'))
+                return null
+            } finally {
+                creatingRef.current = null
+            }
+        })()
+
+        return creatingRef.current
     }
 
     /* -----------------------------
@@ -231,31 +273,36 @@ export function usePartnerWizardLogic({
 
     async function autoSave(tab: WizardTab) {
         if (isView) return
+        if (submitting) return // ✅ prevent racing with finish
         const id = await ensurePartnerId()
         if (!id) return
 
-        if (tab === 'identity')
-            await updateIdentity.mutateAsync({ id, payload: buildIdentityPayload(true) })
-        if (tab === 'relationship')
-            await updateRelationship.mutateAsync({
-                id,
-                payload: buildRelationshipPayload(true),
-            })
-        if (tab === 'financial')
-            await updateFinancial.mutateAsync({
-                id,
-                payload: buildFinancialPayload(true),
-            })
-        if (tab === 'analysis')
-            await updateAnalysis.mutateAsync({
-                id,
-                payload: buildAnalysisPayload(true),
-            })
-        if (tab === 'acquisition')
-            await updateAcquisition.mutateAsync({
-                id,
-                payload: buildAcquisitionPayload(true),
-            })
+        try {
+            if (tab === 'identity')
+                await updateIdentity.mutateAsync({ id, payload: buildIdentityPayload(true) })
+            if (tab === 'relationship')
+                await updateRelationship.mutateAsync({
+                    id,
+                    payload: buildRelationshipPayload(true),
+                })
+            if (tab === 'financial')
+                await updateFinancial.mutateAsync({
+                    id,
+                    payload: buildFinancialPayload(true),
+                })
+            if (tab === 'analysis')
+                await updateAnalysis.mutateAsync({
+                    id,
+                    payload: buildAnalysisPayload(true),
+                })
+            if (tab === 'acquisition')
+                await updateAcquisition.mutateAsync({
+                    id,
+                    payload: buildAcquisitionPayload(true),
+                })
+        } catch (e) {
+            toast.error(normalizeErrorMessage(e, 'خطا در ذخیره اطلاعات'))
+        }
     }
 
     async function handleTabChange(
@@ -268,34 +315,44 @@ export function usePartnerWizardLogic({
     }
 
     async function finish() {
-        const id = await ensurePartnerId()
-        if (!id) return toast.error('نام کسب‌وکار الزامی است')
+        if (isView) {
+            // در view بهتره finish فقط close کنه
+            onClose()
+            return
+        }
 
-        await updateIdentity.mutateAsync({ id, payload: buildIdentityPayload(true) })
-        await updateRelationship.mutateAsync({
-            id,
-            payload: buildRelationshipPayload(true),
-        })
-        await updateFinancial.mutateAsync({
-            id,
-            payload: buildFinancialPayload(true),
-        })
-        await updateAnalysis.mutateAsync({
-            id,
-            payload: buildAnalysisPayload(true),
-        })
-        await updateAcquisition.mutateAsync({
-            id,
-            payload: buildAcquisitionPayload(true),
-        })
+        if (submitting) return
+        setSubmitting(true)
 
-        toast.success('ذخیره شد')
-        onClose()
-        onFinished?.()
+        try {
+            const id = await ensurePartnerId()
+            if (!id) {
+                toast.error('نام کسب‌وکار الزامی است')
+                return
+            }
+
+            await updateIdentity.mutateAsync({ id, payload: buildIdentityPayload(true) })
+            await updateRelationship.mutateAsync({ id, payload: buildRelationshipPayload(true) })
+            await updateFinancial.mutateAsync({ id, payload: buildFinancialPayload(true) })
+            await updateAnalysis.mutateAsync({ id, payload: buildAnalysisPayload(true) })
+            await updateAcquisition.mutateAsync({ id, payload: buildAcquisitionPayload(true) })
+
+            toast.success('ذخیره شد')
+
+            // ✅ اول refresh لیست، بعد close
+            onFinished?.()
+            onClose()
+        } catch (e) {
+            toast.error(normalizeErrorMessage(e, 'خطا در ذخیره نهایی'))
+        } finally {
+            setSubmitting(false)
+        }
     }
 
     return {
         finish,
         handleTabChange,
+        submitting,
+        partnerId: partnerIdRef.current,
     }
 }
