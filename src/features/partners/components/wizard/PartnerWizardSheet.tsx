@@ -21,6 +21,7 @@ import { RelationshipTab } from './tabs/RelationshipTab'
 import { FinancialTab } from './tabs/FinancialTab'
 import { AnalysisTab } from './tabs/AnalysisTab'
 import { AcquisitionTab } from './tabs/AcquisitionTab'
+import { LocationTab } from './tabs/LocationTab'
 
 const PHONE_LABEL_MAP: Record<string, string> = {
     'موبایل': 'mobile',
@@ -255,8 +256,9 @@ export function PartnerWizardSheet({
                                     wizard.handleTabChange(v as WizardTab, activeTab, setActiveTab)
                                 }
                             >
-                                <TabsList className="grid w-full grid-cols-5">
+                                <TabsList className="grid w-full grid-cols-6">
                                     <TabsTrigger value="identity">{t('partners.wizard.tabs.identity')}</TabsTrigger>
+                                    <TabsTrigger value="location">{t('partners.wizard.tabs.location')}</TabsTrigger>
                                     <TabsTrigger value="relationship">{t('partners.wizard.tabs.relationship')}</TabsTrigger>
                                     <TabsTrigger value="financial">{t('partners.wizard.tabs.financial')}</TabsTrigger>
                                     <TabsTrigger value="analysis">{t('partners.wizard.tabs.analysis')}</TabsTrigger>
@@ -268,6 +270,8 @@ export function PartnerWizardSheet({
                                 <FinancialTab form={form} mode={mode} />
                                 <AnalysisTab form={form} mode={mode} />
                                 <AcquisitionTab form={form} mode={mode} />
+                                <LocationTab form={form} mode={mode} />
+
                             </Tabs>
 
                         </div>

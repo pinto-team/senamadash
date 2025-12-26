@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 
 import { TabsContent } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import {
     Select,
@@ -14,7 +13,6 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
-import { LocationPicker } from '../components/LocationPicker'
 import { LabeledField } from '@/features/partners/components/form/LabeledField'
 import type { WizardFormValues, WizardMode } from '../PartnerWizard.types'
 import { useI18n } from '@/shared/hooks/useI18n'
@@ -269,22 +267,6 @@ export function IdentityTab({ form, mode }: Props) {
                         )
                     })}
                 </div>
-            </LabeledField>
-
-            {/* ===== Location ===== */}
-            <LabeledField label={t('partners.form.location')}>
-                <Controller
-                    control={control}
-                    name="identity.location"
-                    render={({ field }) => (
-                        <LocationPicker
-                            disabled={isView}
-                            location={field.value ?? null}
-                            onChange={field.onChange}
-                            t={t}
-                        />
-                    )}
-                />
             </LabeledField>
         </TabsContent>
     )

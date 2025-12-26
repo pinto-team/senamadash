@@ -27,14 +27,15 @@ export type WizardTab =
     | 'financial'
     | 'analysis'
     | 'acquisition'
+    | 'location'
 
 /* -----------------------------
- * Form values (NO frontend validation)
+ * Form values (UX-friendly, backend-safe)
  * ----------------------------- */
 
 export type WizardFormValues = {
     identity: {
-        /** only field that backend usually expects */
+        /** required by backend */
         brand_name: string
 
         manager_full_name?: string
@@ -42,7 +43,7 @@ export type WizardFormValues = {
 
         contact_numbers: Array<{
             label: string
-            number?: string
+            number: string
             custom_label?: string
         }>
 
@@ -54,9 +55,14 @@ export type WizardFormValues = {
 
         province?: string
         city?: string
-        neighborhood?: string
-        address_details?: string
-        notes?: string
+
+        /** ✅ backend field */
+        full_address?: string
+
+        /** ✅ UX-only (واتساپ / گوگل مپ) */
+        location_raw?: string
+
+        /** ✅ backend field */
         location?: PartnerLocation | null
     }
 

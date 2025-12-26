@@ -487,7 +487,7 @@
   "partners.enums.funnel_stage.lead": "در حال گفتگو و پیگیری",
   "partners.enums.funnel_stage.qualified": "ارزش همکاری دارد",
   "partners.enums.funnel_stage.customer": "همکاری فعال داریم",
-  "partners.enums.funnel_stage.churned": "همکاری متوقف شده"
+  "partners.enums.funnel_stage.churned": "همکاری متوقف شده",
 
-
+  "partners.wizard.tabs.location":"نشانی"
 }
