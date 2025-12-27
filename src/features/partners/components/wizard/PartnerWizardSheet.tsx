@@ -15,6 +15,8 @@ import { useI18n } from '@/shared/hooks/useI18n'
 
 import type { WizardMode, WizardTab, WizardFormValues } from './PartnerWizard.types'
 import { usePartnerWizardLogic } from './PartnerWizard.hooks'
+import { toWizardFormValues } from './partnerWizard.mappers'
+import type { Partner } from '@/features/partners/model/types'
 
 import { IdentityTab } from './tabs/IdentityTab'
 import { RelationshipTab } from './tabs/RelationshipTab'
@@ -23,42 +25,10 @@ import { AnalysisTab } from './tabs/AnalysisTab'
 import { AcquisitionTab } from './tabs/AcquisitionTab'
 import { LocationTab } from './tabs/LocationTab'
 
-const PHONE_LABEL_MAP: Record<string, string> = {
-    'موبایل': 'mobile',
-    'تلفن همراه': 'mobile',
-    'mobile': 'mobile',
-
-    'تلفن ثابت': 'landline',
-    'landline': 'landline',
-
-    'دفتر': 'office',
-    'office': 'office',
-
-    'کارخانه': 'factory',
-    'انبار': 'warehouse',
-    'فروش': 'sales',
-    'پشتیبانی': 'support',
-    'مدیریت': 'manager',
-    'حسابداری': 'accounting',
-    'فکس': 'fax',
-}
-
-const SOCIAL_PLATFORM_MAP: Record<string, string> = {
-    'instagram': 'instagram',
-    'اینستاگرام': 'instagram',
-
-    'telegram': 'telegram',
-    'تلگرام': 'telegram',
-
-    'whatsapp': 'whatsapp',
-    'واتساپ': 'whatsapp',
-}
-
-
 type Props = {
     open: boolean
     mode: WizardMode
-    partner?: any
+    partner?: Partner | null
     onClose: () => void
     onFinished?: () => void
 }
@@ -76,121 +46,10 @@ export function PartnerWizardSheet({
     const [activeTab, setActiveTab] = useState<WizardTab>('identity')
 
     // ✅ safe defaults (NEVER leave undefined for watch/useFieldArray consumers)
-    const defaultValues = useMemo<WizardFormValues>(() => {
-        const id = partner?.identity
-        const rel = partner?.relationship
-        const fin = partner?.financial_estimation
-        const ana = partner?.analysis
-        const acq = partner?.acquisition
-
-        return {
-            identity: {
-                brand_name: id?.brand_name ?? '',
-                manager_full_name: id?.manager_full_name ?? '',
-                business_type: (id?.business_type ?? '') as any,
-
-                contact_numbers:
-                    id?.contact_numbers?.length
-                        ? id.contact_numbers.map((c: any) => {
-                            const normalizedLabel =
-                                PHONE_LABEL_MAP[c.label] ?? 'other'
-
-                            return {
-                                label: normalizedLabel,
-                                custom_label:
-                                    normalizedLabel === 'other' ? c.label : '',
-                                number: c.number ?? '',
-                            }
-                        })
-                        : [
-                            {
-                                label: 'mobile',
-                                custom_label: '',
-                                number: '',
-                            },
-                        ],
-
-                social_links:
-                    id?.social_links?.length
-                        ? id.social_links.map((s: any) => {
-                            const normalizedPlatform =
-                                SOCIAL_PLATFORM_MAP[s.platform] ?? 'other'
-
-                            return {
-                                platform: normalizedPlatform,
-                                custom_label:
-                                    normalizedPlatform === 'other' ? s.platform : '',
-                                url: s.url ?? '',
-                            }
-                        })
-                        : [
-                            {
-                                platform: 'instagram',
-                                custom_label: '',
-                                url: '',
-                            },
-                        ],
-
-                province: id?.province ?? '',
-                city: id?.city ?? '',
-                neighborhood: '',
-                full_address: id?.full_address ?? '',
-                location_raw: id?.map_link ?? '',
-                notes: '',
-                location: id?.location ?? null,
-            },
-
-            relationship: {
-                partnership_status: (rel?.partnership_status ?? '') as any,
-                customer_relationship_level: (rel?.customer_relationship_level ?? '') as any,
-                customer_satisfaction: (rel?.customer_satisfaction ?? '') as any,
-                credit_status: (rel?.credit_status ?? '') as any,
-                payment_types: rel?.payment_types ?? [],
-                sensitivity: (rel?.sensitivity ?? '') as any,
-                preferred_channel: (rel?.preferred_channel ?? '') as any,
-                notes: rel?.notes ?? '',
-            },
-
-            financial_estimation: {
-                first_transaction_date: fin?.first_transaction_date ?? '',
-                first_transaction_amount_estimated:
-                    fin?.first_transaction_amount_estimated != null
-                        ? String(fin.first_transaction_amount_estimated)
-                        : '',
-                last_transaction_date: fin?.last_transaction_date ?? '',
-                last_transaction_amount_estimated:
-                    fin?.last_transaction_amount_estimated != null
-                        ? String(fin.last_transaction_amount_estimated)
-                        : '',
-                total_transaction_amount_estimated:
-                    fin?.total_transaction_amount_estimated != null
-                        ? String(fin.total_transaction_amount_estimated)
-                        : '',
-                transaction_count_estimated:
-                    fin?.transaction_count_estimated != null
-                        ? String(fin.transaction_count_estimated)
-                        : '',
-                avg_transaction_value_estimated:
-                    fin?.avg_transaction_value_estimated != null
-                        ? String(fin.avg_transaction_value_estimated)
-                        : '',
-                estimation_note: fin?.estimation_note ?? '',
-            },
-
-            analysis: {
-                funnel_stage: (ana?.funnel_stage ?? '') as any,
-                potential_level: (ana?.potential_level ?? '') as any,
-                financial_level: (ana?.financial_level ?? '') as any,
-                purchase_readiness: (ana?.purchase_readiness ?? '') as any,
-                tags_input: Array.isArray(ana?.tags) ? ana.tags.join(', ') : '', // ✅ avoid undefined.split
-            },
-
-            acquisition: {
-                source: (acq?.source ?? '') as any,
-                source_note: acq?.source_note ?? '',
-            },
-        }
-    }, [partner])
+    const defaultValues = useMemo<WizardFormValues>(
+        () => toWizardFormValues(partner),
+        [partner],
+    )
 
     const form = useForm<WizardFormValues>({
         mode: 'onChange',

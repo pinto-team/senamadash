@@ -13,44 +13,16 @@ import {
     useUpdatePartnerRelationship,
 } from '@/features/partners/hooks/usePartnersQueries'
 
-import type {
-    PartnerAcquisition,
-    PartnerAnalysis,
-    PartnerFinancialEstimation,
-    PartnerIdentity,
-    PartnerQuickEntryPayload,
-    PartnerRelationship,
-    PartnerContactNumber,
-    PartnerSocialLink,
-} from '@/features/partners/model/types'
-
-/* ----------------------------------
- * Helpers
- * ---------------------------------- */
-
-const isNonEmpty = (v?: string | null): v is string =>
-    typeof v === 'string' && v.trim().length > 0
-
-const toNumberOrNull = (v?: string): number | null => {
-    if (!isNonEmpty(v)) return null
-    const n = Number(v)
-    return Number.isFinite(n) ? n : null
-}
-
-const toIntOrNull = (v?: string): number | null => {
-    if (!isNonEmpty(v)) return null
-    const n = parseInt(v, 10)
-    return Number.isFinite(n) ? n : null
-}
-
-const splitTags = (input?: string): string[] | null => {
-    if (!isNonEmpty(input)) return null
-    const tags = input
-        .split(',')
-        .map((x) => x.trim())
-        .filter(Boolean)
-    return tags.length ? tags : null
-}
+import type { Partner } from '@/features/partners/model/types'
+import {
+    buildAcquisitionPayload,
+    buildAnalysisPayload,
+    buildFinancialPayload,
+    buildIdentityPayload,
+    buildQuickEntryPayload,
+    buildRelationshipPayload,
+    isWizardIdentityComplete,
+} from './partnerWizard.mappers'
 
 function normalizeErrorMessage(err: unknown, fallback: string) {
     // اگر hookهای شما خطا را با شکل خاصی می‌دهند، اینجا بهترش کن
@@ -71,7 +43,7 @@ function normalizeErrorMessage(err: unknown, fallback: string) {
 
 type Params = {
     mode: WizardMode
-    partner?: any
+    partner?: Partner | null
     form: UseFormReturn<WizardFormValues>
     onClose: () => void
     onFinished?: () => void
@@ -114,8 +86,7 @@ export function usePartnerWizardLogic({
      * ----------------------------- */
 
     function hasMinimumQuickEntry() {
-        const v = form.getValues().identity
-        return isNonEmpty(v.brand_name)
+        return isWizardIdentityComplete(form.getValues().identity)
     }
 
     async function ensurePartnerId(): Promise<string | null> {
@@ -128,30 +99,7 @@ export function usePartnerWizardLogic({
 
         creatingRef.current = (async () => {
             try {
-                const v = form.getValues().identity
-
-                const contact_numbers: PartnerContactNumber[] =
-                    v.contact_numbers
-                        ?.filter((c) => isNonEmpty(c.number))
-                        .map((c) => ({
-                            label: c.label,
-                            number: c.number!.trim(),
-                        })) ?? []
-
-                const identity = form.getValues().identity
-                const relNotes = form.getValues().relationship?.notes
-
-                const payload: PartnerQuickEntryPayload = {
-                    brand_name: identity.brand_name.trim(),
-                    manager_full_name: isNonEmpty(identity.manager_full_name) ? identity.manager_full_name.trim() : null,
-                    business_type: identity.business_type || null,
-                    contact_numbers,
-                    province: identity.province || null,
-                    city: identity.city || null,
-                    location: identity.location ?? null,
-                    notes: isNonEmpty(relNotes) ? relNotes.trim() : null,
-                }
-
+                const payload = buildQuickEntryPayload(form.getValues())
 
                 const res = await quickEntry.mutateAsync(payload)
 
@@ -170,107 +118,6 @@ export function usePartnerWizardLogic({
     }
 
     /* -----------------------------
-     * Payload builders
-     * ----------------------------- */
-
-    function buildIdentityPayload(commit: boolean): Partial<PartnerIdentity> {
-        const v = form.getValues().identity
-
-        const contact_numbers: PartnerContactNumber[] | undefined = commit
-            ? v.contact_numbers
-                ?.filter((c) => isNonEmpty(c.number))
-                .map((c) => ({
-                    label: c.label,
-                    number: c.number!.trim(),
-                }))
-            : undefined
-
-        const social_links: PartnerSocialLink[] | undefined = commit
-            ? v.social_links
-                ?.filter((s) => isNonEmpty(s.url))
-                .map((s) => ({
-                    platform: s.platform as any,
-                    url: s.url!.trim(),
-                }))
-            : undefined
-
-        return {
-            brand_name: isNonEmpty(v.brand_name) ? v.brand_name.trim() : undefined,
-            manager_full_name: isNonEmpty(v.manager_full_name)
-                ? v.manager_full_name.trim()
-                : undefined,
-            business_type: v.business_type || undefined,
-
-            contact_numbers,
-            social_links,
-
-            province: v.province || undefined,
-            city: v.city || undefined,
-            full_address: v.full_address || undefined,
-            map_link: v.location_raw || (commit ? null : undefined),
-            location: v.location ?? undefined,
-        }
-    }
-
-    function buildRelationshipPayload(commit: boolean): Partial<PartnerRelationship> {
-        const v = form.getValues().relationship
-        return {
-            partnership_status: v.partnership_status || (commit ? null : undefined),
-            customer_relationship_level:
-                v.customer_relationship_level || (commit ? null : undefined),
-            customer_satisfaction: v.customer_satisfaction || (commit ? null : undefined),
-            credit_status: v.credit_status || (commit ? null : undefined),
-            payment_types: commit ? v.payment_types : undefined,
-            sensitivity: v.sensitivity || (commit ? null : undefined),
-            preferred_channel: v.preferred_channel || (commit ? null : undefined),
-            notes: v.notes || (commit ? null : undefined),
-        }
-    }
-
-    function buildFinancialPayload(commit: boolean): Partial<PartnerFinancialEstimation> {
-        const v = form.getValues().financial_estimation
-        return {
-            first_transaction_date: v.first_transaction_date || (commit ? null : undefined),
-            first_transaction_amount_estimated: commit
-                ? toNumberOrNull(v.first_transaction_amount_estimated)
-                : undefined,
-            last_transaction_date: v.last_transaction_date || (commit ? null : undefined),
-            last_transaction_amount_estimated: commit
-                ? toNumberOrNull(v.last_transaction_amount_estimated)
-                : undefined,
-            total_transaction_amount_estimated: commit
-                ? toNumberOrNull(v.total_transaction_amount_estimated)
-                : undefined,
-            transaction_count_estimated: commit
-                ? toIntOrNull(v.transaction_count_estimated)
-                : undefined,
-            avg_transaction_value_estimated: commit
-                ? toNumberOrNull(v.avg_transaction_value_estimated)
-                : undefined,
-            estimation_note: v.estimation_note || (commit ? null : undefined),
-        }
-    }
-
-    function buildAnalysisPayload(commit: boolean): Partial<PartnerAnalysis> {
-        const v = form.getValues().analysis
-        return {
-            funnel_stage: v.funnel_stage || (commit ? null : undefined),
-            potential_level: v.potential_level || (commit ? null : undefined),
-            financial_level: v.financial_level || (commit ? null : undefined),
-            purchase_readiness: v.purchase_readiness || (commit ? null : undefined),
-            tags: commit ? splitTags(v.tags_input) : undefined,
-        }
-    }
-
-    function buildAcquisitionPayload(commit: boolean): Partial<PartnerAcquisition> {
-        const v = form.getValues().acquisition
-        return {
-            source: v.source || (commit ? null : undefined),
-            source_note: v.source_note || (commit ? null : undefined),
-        }
-    }
-
-    /* -----------------------------
      * Autosave / Finish
      * ----------------------------- */
 
@@ -282,26 +129,29 @@ export function usePartnerWizardLogic({
 
         try {
             if (tab === 'identity')
-                await updateIdentity.mutateAsync({ id, payload: buildIdentityPayload(true) })
+                await updateIdentity.mutateAsync({
+                    id,
+                    payload: buildIdentityPayload(form.getValues().identity, true),
+                })
             if (tab === 'relationship')
                 await updateRelationship.mutateAsync({
                     id,
-                    payload: buildRelationshipPayload(true),
+                    payload: buildRelationshipPayload(form.getValues().relationship, true),
                 })
             if (tab === 'financial')
                 await updateFinancial.mutateAsync({
                     id,
-                    payload: buildFinancialPayload(true),
+                    payload: buildFinancialPayload(form.getValues().financial_estimation, true),
                 })
             if (tab === 'analysis')
                 await updateAnalysis.mutateAsync({
                     id,
-                    payload: buildAnalysisPayload(true),
+                    payload: buildAnalysisPayload(form.getValues().analysis, true),
                 })
             if (tab === 'acquisition')
                 await updateAcquisition.mutateAsync({
                     id,
-                    payload: buildAcquisitionPayload(true),
+                    payload: buildAcquisitionPayload(form.getValues().acquisition, true),
                 })
         } catch (e) {
             toast.error(normalizeErrorMessage(e, 'خطا در ذخیره اطلاعات'))
@@ -334,11 +184,28 @@ export function usePartnerWizardLogic({
                 return
             }
 
-            await updateIdentity.mutateAsync({ id, payload: buildIdentityPayload(true) })
-            await updateRelationship.mutateAsync({ id, payload: buildRelationshipPayload(true) })
-            await updateFinancial.mutateAsync({ id, payload: buildFinancialPayload(true) })
-            await updateAnalysis.mutateAsync({ id, payload: buildAnalysisPayload(true) })
-            await updateAcquisition.mutateAsync({ id, payload: buildAcquisitionPayload(true) })
+            const values = form.getValues()
+
+            await updateIdentity.mutateAsync({
+                id,
+                payload: buildIdentityPayload(values.identity, true),
+            })
+            await updateRelationship.mutateAsync({
+                id,
+                payload: buildRelationshipPayload(values.relationship, true),
+            })
+            await updateFinancial.mutateAsync({
+                id,
+                payload: buildFinancialPayload(values.financial_estimation, true),
+            })
+            await updateAnalysis.mutateAsync({
+                id,
+                payload: buildAnalysisPayload(values.analysis, true),
+            })
+            await updateAcquisition.mutateAsync({
+                id,
+                payload: buildAcquisitionPayload(values.acquisition, true),
+            })
 
             toast.success('ذخیره شد')
 
