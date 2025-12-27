@@ -273,6 +273,15 @@ export function RelationshipTab({ form, mode }: Props) {
                     ))}
                 </div>
             </LabeledField>
+            <LabeledField label={t('partners.form.notes')}>
+                <Textarea
+                    disabled={isView}
+                    rows={4}
+                    placeholder={t('partners.fields.notes')}
+                    {...register('relationship.notes')}
+                />
+            </LabeledField>
+
         </TabsContent>
     )
 }

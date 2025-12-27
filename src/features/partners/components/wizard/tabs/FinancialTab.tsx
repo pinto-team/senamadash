@@ -290,15 +290,6 @@ export function FinancialTab({ form, mode }: Props) {
                     />
                 </LabeledField>
             </div>
-
-            {/* ===== Notes ===== */}
-            <LabeledField label={t('partners.form.notes')}>
-                <Textarea
-                    disabled={isView}
-                    placeholder={t('partners.form.notes')}
-                    {...register('relationship.notes')}
-                />
-            </LabeledField>
         </TabsContent>
     )
 }

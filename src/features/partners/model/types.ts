@@ -61,6 +61,7 @@ export interface PartnerIdentity {
     social_links?: PartnerSocialLink[]
     province?: string | null
     city?: string | null
+    map_link?: string | null
     full_address?: string | null
     location?: PartnerLocation | null
 }
@@ -141,5 +142,5 @@ export type PartnerDetailResponse = ApiResponse<Partner>
 /** quick-entry payload (برای ساخت) */
 export type PartnerQuickEntryPayload = Pick<
     PartnerIdentity,
-    'brand_name' | 'manager_full_name' | 'business_type' | 'contact_numbers' | 'province' | 'city' | 'location'
+    'brand_name' | 'manager_full_name'| 'full_address' | 'business_type' | 'contact_numbers' | 'province' | 'city' | 'location'
 > & { notes?: string | null }

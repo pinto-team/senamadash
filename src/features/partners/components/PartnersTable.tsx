@@ -1,6 +1,13 @@
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import type { Partner } from '@/features/partners/model/types'
 import { useI18n } from '@/shared/hooks/useI18n'
@@ -13,84 +20,79 @@ interface PartnersTableProps {
     onDelete: (partner: Partner) => void
 }
 
-export function PartnersTable({ items, onView, onEdit, onDelete }: PartnersTableProps) {
+export function PartnersTable({
+                                  items,
+                                  onView,
+                                  onEdit,
+                                  onDelete,
+                              }: PartnersTableProps) {
     const { t, locale } = useI18n()
     const na = t('common.na')
-    const d = (value: string | number | null | undefined) => convertDigitsByLocale(value ?? na, locale)
+    const d = (v?: string | number | null) =>
+        convertDigitsByLocale(v ?? na, locale)
 
     return (
         <div className="overflow-hidden rounded-lg border bg-background">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>{t('partners.table.brand_name')}</TableHead>
-                        <TableHead>{t('partners.table.manager')}</TableHead>
-                        <TableHead>{t('partners.table.business_type')}</TableHead>
-                        <TableHead>{t('partners.table.funnel_stage')}</TableHead>
-                        <TableHead>{t('partners.table.acquisition_source')}</TableHead>
-                        <TableHead className="text-right">{t('partners.table.total_transaction_amount')}</TableHead>
-                        <TableHead>{t('partners.table.last_transaction_date')}</TableHead>
-                        <TableHead className="text-right">{t('partners.table.actions')}</TableHead>
+                        <TableHead>نام کسب و کار</TableHead>
+                        <TableHead>نام مدیریت</TableHead>
+                        <TableHead>نوع کسب‌وکار</TableHead>
+                        <TableHead>وضعیت ارتباط</TableHead>
                     </TableRow>
                 </TableHeader>
 
                 <TableBody>
-                    {items.map((p) => (
-                        <TableRow key={p.id}>
-                            <TableCell className="font-medium">{p.identity?.brand_name ?? na}</TableCell>
-                            <TableCell>{p.identity?.manager_full_name || na}</TableCell>
+                    {items.map((p) => {
+                        const id = p.identity
+                        const an = p.analysis
 
-                            <TableCell>
-                                {p.identity?.business_type ? t(`partners.enums.business_type.${p.identity.business_type}`) : na}
-                            </TableCell>
+                        return (
+                            <TableRow key={p.id}>
+                                {/* برند */}
+                                <TableCell className="font-medium">
+                                    {id?.brand_name ?? na}
+                                </TableCell>
 
-                            <TableCell>
-                                {p.analysis?.funnel_stage ? t(`partners.enums.funnel_stage.${p.analysis.funnel_stage}`) : na}
-                            </TableCell>
+                                {/* نام مدیر */}
+                                <TableCell>
+                                    {id?.manager_full_name || '—'}
+                                </TableCell>
 
-                            <TableCell>
-                                {p.acquisition?.source ? t(`partners.enums.acquisition_source.${p.acquisition.source}`) : na}
-                            </TableCell>
+                                {/* دسته‌بندی */}
+                                <TableCell>
+                                    {id?.business_type
+                                        ? t(`partners.enums.business_type.${id.business_type}`)
+                                        : '—'}
+                                </TableCell>
 
-                            <TableCell className="text-right">
-                                {d(p.financial_estimation?.total_transaction_amount_estimated ?? null)}
-                            </TableCell>
+                                {/* مرحله قیف */}
+                                <TableCell>
+                                    {an?.funnel_stage
+                                        ? t(`partners.enums.funnel_stage.${an.funnel_stage}`)
+                                        : '—'}
+                                </TableCell>
 
-                            <TableCell>{d(p.financial_estimation?.last_transaction_date ?? null)}</TableCell>
-
-                            <TableCell>
-                                <div className="flex justify-end gap-2">
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        onClick={() => onView(p)}
-                                        aria-label={t('partners.actions.view') as string}
-                                    >
-                                        <Eye className="h-4 w-4" />
-                                    </Button>
-
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        onClick={() => onEdit(p)}
-                                        aria-label={t('partners.actions.edit') as string}
-                                    >
-                                        <Pencil className="h-4 w-4" />
-                                    </Button>
-
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        onClick={() => onDelete(p)}
-                                        aria-label={t('partners.actions.delete') as string}
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                                {/* عملیات */}
+                                <TableCell>
+                                    <div className="flex justify-end gap-2">
+                                        <Button size="icon" variant="ghost" onClick={() => onView(p)}>
+                                            <Eye className="h-4 w-4" />
+                                        </Button>
+                                        <Button size="icon" variant="ghost" onClick={() => onEdit(p)}>
+                                            <Pencil className="h-4 w-4" />
+                                        </Button>
+                                        <Button size="icon" variant="ghost" onClick={() => onDelete(p)}>
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })}
                 </TableBody>
+
             </Table>
         </div>
     )

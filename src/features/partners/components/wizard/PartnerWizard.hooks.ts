@@ -138,18 +138,20 @@ export function usePartnerWizardLogic({
                             number: c.number!.trim(),
                         })) ?? []
 
+                const identity = form.getValues().identity
+                const relNotes = form.getValues().relationship?.notes
+
                 const payload: PartnerQuickEntryPayload = {
-                    brand_name: v.brand_name.trim(),
-                    manager_full_name: isNonEmpty(v.manager_full_name)
-                        ? v.manager_full_name.trim()
-                        : null,
-                    business_type: v.business_type || null,
+                    brand_name: identity.brand_name.trim(),
+                    manager_full_name: isNonEmpty(identity.manager_full_name) ? identity.manager_full_name.trim() : null,
+                    business_type: identity.business_type || null,
                     contact_numbers,
-                    province: v.province || null,
-                    city: v.city || null,
-                    location: v.location ?? null,
-                    notes: v.notes || null,
+                    province: identity.province || null,
+                    city: identity.city || null,
+                    location: identity.location ?? null,
+                    notes: isNonEmpty(relNotes) ? relNotes.trim() : null,
                 }
+
 
                 const res = await quickEntry.mutateAsync(payload)
 
@@ -204,7 +206,8 @@ export function usePartnerWizardLogic({
 
             province: v.province || undefined,
             city: v.city || undefined,
-            full_address: v.address_details || undefined,
+            full_address: v.full_address || undefined,
+            map_link: v.location_raw || (commit ? null : undefined),
             location: v.location ?? undefined,
         }
     }
