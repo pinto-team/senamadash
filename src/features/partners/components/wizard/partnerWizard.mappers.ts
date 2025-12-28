@@ -10,6 +10,7 @@ import type {
     PartnerSocialLink,
 } from '@/features/partners/model/types'
 import type { WizardFormValues } from './PartnerWizard.types'
+import type { SocialPlatform } from '@/features/partners/model/types'
 
 const PHONE_LABEL_MAP: Record<string, string> = {
     موبایل: 'mobile',
@@ -31,7 +32,7 @@ const PHONE_LABEL_MAP: Record<string, string> = {
     فکس: 'fax',
 }
 
-const SOCIAL_PLATFORM_MAP: Record<string, string> = {
+const SOCIAL_PLATFORM_MAP: Record<string, SocialPlatform> = {
     instagram: 'instagram',
     اینستاگرام: 'instagram',
 
@@ -41,6 +42,7 @@ const SOCIAL_PLATFORM_MAP: Record<string, string> = {
     whatsapp: 'whatsapp',
     واتساپ: 'whatsapp',
 }
+
 
 const isNonEmpty = (value?: string | null): value is string =>
     typeof value === 'string' && value.trim().length > 0
@@ -101,14 +103,14 @@ export function toWizardFormValues(partner?: Partner | null): WizardFormValues {
             social_links:
                 id?.social_links?.length
                     ? id.social_links.map((s) => {
-                          const normalizedPlatform = SOCIAL_PLATFORM_MAP[s.platform] ?? 'other'
+                        const normalizedPlatform = SOCIAL_PLATFORM_MAP[s.platform]
 
-                          return {
-                              platform: normalizedPlatform,
-                              custom_label: normalizedPlatform === 'other' ? s.platform : '',
-                              url: s.url ?? '',
-                          }
-                      })
+                        return {
+                            platform: normalizedPlatform ?? '',
+                            custom_label: normalizedPlatform ? '' : s.platform,
+                            url: s.url ?? '',
+                        }
+                    })
                     : [
                           {
                               platform: 'instagram',
